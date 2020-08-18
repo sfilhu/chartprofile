@@ -2,13 +2,15 @@
   "dashboard": {
     "completedTasks": "Completed Tasks",
     "dailySales": "Daily Sales",
-    "performance": "Performance",
+    "performance": "Cadastradas",
     "simpleTable": "Simple Table",
-    "totalShipments": "Total Shipments",
+    "totalShipments": "Total",
     "chartCategories": [
-      "Accounts",
-      "Purchases",
-      "Sessions"
+      { "index": 0, "name": "Semana passada"},
+      { "index": 0, "name": "Esta semana"},
+      { "index": 1, "name": "Mês passado"},
+      { "index": 1, "name": "Este mês"},
+      { "index": 2, "name": "Este ano"}
     ],
     "tasks": "Tasks({count})",
     "today": "Today",

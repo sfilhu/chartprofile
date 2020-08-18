@@ -1,6 +1,6 @@
 <template>
   <footer class="footer">
-    <div class="container-fluid">
+    <!-- <div class="container-fluid">
       <ul class="nav">
         <li class="nav-item">
           <a class="nav-link" href="http://www.creative-tim.com">
@@ -23,7 +23,7 @@
         <a href="https://www.binarcode.com" target="_blank" rel="noopener">Binar Code</a>&nbsp;&
         <a href="https://www.creative-tim.com" target="_blank" rel="noopener">Creative Tim</a> for a better web.
       </div>
-    </div>
+    </div> -->
   </footer>
 </template>
 <script>
