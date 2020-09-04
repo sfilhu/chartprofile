@@ -9,7 +9,7 @@
       :min-height="150"
       :scrollable="true"
       :reset="true"
-      width="40%"
+      :width="size"
       height="auto"
       styles="background: transparent"
     >
@@ -30,6 +30,11 @@
       FadeTransition,
       Register
     },
+    computed: {
+      size() {
+        return window.innerWidth > 500 ? '60%' : '90%'
+      }
+    },
     methods: {
         show () {
             this.$modal.show('my-first-modal');
@@ -38,9 +43,6 @@
             this.$modal.hide('my-first-modal');
         }
     },
-    mount () {
-        this.show()
-    }
   };
 </script>
 

@@ -7,14 +7,55 @@
 <script>
   import { BaseTable } from "@/components";
   export default {
+    props: ['users'],
     components: {
       BaseTable
     },
+    data: () => {
+      return {
+        data: []
+      }
+    },
+    watch: {
+      users: {
+        handler: function(val) {
+          this.data = val;
+        },
+        deep: true
+      }
+    },
     computed: {
       table(){
-        return this.$t('dashboard.usersTable');
+        const table = {
+          columns: [
+            {
+              title: 'Name',
+              name: 'name'
+            },
+            {
+              title: 'Email',
+              name: 'email'
+            },
+            {
+              title: 'Bairro',
+              name: 'neighborhood'
+            },
+            {
+              title: 'Gênero',
+              name: 'genero'
+            },
+            {
+              title: 'Como nos conheceu?',
+              name: 'toknow'
+            }
+          ],
+          data: this.data,
+          title: 'Lista de usários'
+        }
+        // console.log(this.$t('dashboard.usersTable'));
+        return table
       }
-    }
+    },
   }
 </script>
 <style>

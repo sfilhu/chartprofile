@@ -22,6 +22,9 @@ import BlackDashboard from "./plugins/blackDashboard";
 import i18n from "./i18n"
 import './registerServiceWorker'
 import VModal from 'vue-js-modal'
+import VueMask from 'v-mask'
+
+Vue.use(VueMask);
 Vue.use(BlackDashboard);
 Vue.use(VueRouter);
 Vue.use(RouterPrefetch);

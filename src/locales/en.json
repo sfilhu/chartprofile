@@ -1,16 +1,15 @@
 {
   "dashboard": {
     "completedTasks": "Completed Tasks",
-    "dailySales": "Daily Sales",
+    "dailySales": "Gênero",
     "performance": "Cadastradas",
     "simpleTable": "Simple Table",
     "totalShipments": "Total",
     "chartCategories": [
-      { "index": 0, "name": "Semana passada"},
-      { "index": 0, "name": "Esta semana"},
-      { "index": 1, "name": "Mês passado"},
+      { "index": 0, "name": "Sem. atual"},
+      { "index": 0, "name": "Sem. passada"},
       { "index": 1, "name": "Este mês"},
-      { "index": 2, "name": "Este ano"}
+      { "index": 1, "name": "Mês passado"}
     ],
     "tasks": "Tasks({count})",
     "today": "Today",

@@ -1,7 +1,7 @@
 <template>
     <card type="plain" title="Google Maps">
-      <div id="map" class="map">
-      </div>
+      <!-- <div id="map" class="map">
+      </div> -->
     </card>
 </template>
 <script>

@@ -22,6 +22,7 @@
         v-bind="$attrs"
         v-on="listeners"
         class="form-control"
+        v-mask="mask"
         aria-describedby="addon-right addon-left">
     </slot>
     <slot name="addonRight">
@@ -55,6 +56,10 @@
         type: String,
         description: "Input icon on the left"
       },
+      mask: {
+        type: String,
+        description: "Input mask"
+      }
     },
     model: {
       prop: 'value',
