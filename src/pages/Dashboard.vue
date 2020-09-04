@@ -370,39 +370,39 @@
         
         console.log(labelIndex, index);
 
-        api.post('/filterRegistred', this.items[index]).then( async resp => {
-          const data_inicio = moment(this.items[index].data_inicio).format('DD')
-          const data_final  = moment(this.items[index].data_final).format('DD')
-          let cont = 0
+        // api.post('/filterRegistred', this.items[index]).then( async resp => {
+        //   const data_inicio = moment(this.items[index].data_inicio).format('DD')
+        //   const data_final  = moment(this.items[index].data_final).format('DD')
+        //   let cont = 0
 
-          for(let i = data_inicio; i <= data_final; i++) {
-            let lengthDateFiltred = await resp.data.filter( item => moment(item.checkIn).format('DD') == i).length;
-            console.log(cont, lengthDateFiltred);
-            this.valuesChartLine[cont] = lengthDateFiltred;
-            cont++;
-          }
+        //   for(let i = data_inicio; i <= data_final; i++) {
+        //     let lengthDateFiltred = await resp.data.filter( item => moment(item.checkIn).format('DD') == i).length;
+        //     console.log(cont, lengthDateFiltred);
+        //     this.valuesChartLine[cont] = lengthDateFiltred;
+        //     cont++;
+        //   }
 
-          console.log(this.valuesChartLine);
-          this.bigLineChart.chartData = {
-            datasets: [{
-              fill: true,
-              borderColor: config.colors.primary,
-              borderWidth: 2,
-              borderDash: [],
-              borderDashOffset: 0.0,
-              pointBackgroundColor: config.colors.primary,
-              pointBorderColor: 'rgba(255,255,255,0)',
-              pointHoverBackgroundColor: config.colors.primary,
-              pointBorderWidth: 20,
-              pointHoverRadius: 4,
-              pointHoverBorderWidth: 15,
-              pointRadius: 4,
-              data: this.valuesChartLine
-            }],
-            labels: label[labelIndex],
-          }
+        //   console.log(this.valuesChartLine);
+        //   this.bigLineChart.chartData = {
+        //     datasets: [{
+        //       fill: true,
+        //       borderColor: config.colors.primary,
+        //       borderWidth: 2,
+        //       borderDash: [],
+        //       borderDashOffset: 0.0,
+        //       pointBackgroundColor: config.colors.primary,
+        //       pointBorderColor: 'rgba(255,255,255,0)',
+        //       pointHoverBackgroundColor: config.colors.primary,
+        //       pointBorderWidth: 20,
+        //       pointHoverRadius: 4,
+        //       pointHoverBorderWidth: 15,
+        //       pointRadius: 4,
+        //       data: this.valuesChartLine
+        //     }],
+        //     labels: label[labelIndex],
+        //   }
 
-        })
+        // })
         
         // this.$refs.bigChart.updateGradients(chartData); 
         this.bigLineChart.activeIndex = index;
