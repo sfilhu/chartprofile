@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_ENDPOINT = process.env.API || 'http://localhost:3000/';
+const API_ENDPOINT = process.env.VUE_APP_API || 'http://localhost:3000/';
 
 const api = axios.create({
   baseURL: API_ENDPOINT,
