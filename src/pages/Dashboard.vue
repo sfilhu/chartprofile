@@ -260,28 +260,6 @@
       TaskList,
       UserTable
     },
-     mounted() {
-      api.get('/users').then( resp => {
-        this.users = resp.data;
-        // alert(this.users.length)
-        this.registered = this.users.filter(item => item.registered == 1).length
-        this.noRegistered = this.users.filter(item => item.registered == 0).length
-        
-        this.filterByGenary(resp.data)
-        this.filterByKnow(resp.data)
-        this.filterRegistered(resp.data)
-        this.initBigChart(0,0);
-      }).catch( err => {
-        console.log(err)
-      })
-
-      this.i18n = this.$i18n;
-      if (this.enableRTL) {
-        this.i18n.locale = 'ar';
-        this.$rtl.enableRTL();
-      }
-      
-    },
     data() {
       return {
         users: '',
@@ -346,6 +324,31 @@
         ]
       }
     },
+    mounted() {
+      this.bigLineChart = {};
+
+      api.get('/users').then( resp => {
+        this.users = resp.data;
+        // alert(this.users.length)
+        this.registered = this.users.filter(item => item.registered == 1).length
+        this.noRegistered = this.users.filter(item => item.registered == 0).length
+        
+        this.filterByGenary(resp.data)
+        this.filterByKnow(resp.data)
+        this.filterRegistered(resp.data)
+        this.initBigChart(1,0);
+      }).catch( err => {
+        console.log(err)
+      })
+
+      this.i18n = this.$i18n;
+      if (this.enableRTL) {
+        this.i18n.locale = 'ar';
+        this.$rtl.enableRTL();
+      }
+      
+    },
+    
     computed: {
       enableRTL() {
         return this.$route.query.enableRTL;
@@ -360,6 +363,9 @@
     methods: {
       // aki
       initBigChart(labelIndex, index) {
+        // option.index, index
+
+
         const label = {
           0: ['SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SÁB', 'DOM'],
           1: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', 
@@ -370,45 +376,48 @@
         
         console.log(labelIndex, index);
 
-        // api.post('/filterRegistred', this.items[index]).then( async resp => {
-        //   const data_inicio = moment(this.items[index].data_inicio).format('DD')
-        //   const data_final  = moment(this.items[index].data_final).format('DD')
-        //   let cont = 0
+        api.post('/filterRegister', this.items[index]).then( async resp => {
+          const data_inicio = moment(this.items[index].data_inicio).format('DD')
+          const data_final  = moment(this.items[index].data_final).format('DD')
+          let cont = 0
 
-        //   for(let i = data_inicio; i <= data_final; i++) {
-        //     let lengthDateFiltred = await resp.data.filter( item => moment(item.checkIn).format('DD') == i).length;
-        //     console.log(cont, lengthDateFiltred);
-        //     this.valuesChartLine[cont] = lengthDateFiltred;
-        //     cont++;
-        //   }
+          for(let i = data_inicio; i <= data_final; i++) {
+            let lengthDateFiltred = await resp.data.filter( item => moment(item.checkIn).format('DD') == i).length;
+            console.log(cont, lengthDateFiltred);
+            this.valuesChartLine[cont] = lengthDateFiltred;
+            cont++;
+          }
 
-        //   console.log(this.valuesChartLine);
-        //   this.bigLineChart.chartData = {
-        //     datasets: [{
-        //       fill: true,
-        //       borderColor: config.colors.primary,
-        //       borderWidth: 2,
-        //       borderDash: [],
-        //       borderDashOffset: 0.0,
-        //       pointBackgroundColor: config.colors.primary,
-        //       pointBorderColor: 'rgba(255,255,255,0)',
-        //       pointHoverBackgroundColor: config.colors.primary,
-        //       pointBorderWidth: 20,
-        //       pointHoverRadius: 4,
-        //       pointHoverBorderWidth: 15,
-        //       pointRadius: 4,
-        //       data: this.valuesChartLine
-        //     }],
-        //     labels: label[labelIndex],
-        //   }
+          console.log(this.valuesChartLine);
+          console.log(this.bigLineChart);
+          // aki
+          // this.bigLineChart.chartData = {
+          //   datasets: [{
+          //     fill: true,
+          //     borderColor: config.colors.primary,
+          //     borderWidth: 2,
+          //     borderDash: [],
+          //     borderDashOffset: 0.0,
+          //     pointBackgroundColor: config.colors.primary,
+          //     pointBorderColor: 'rgba(255,255,255,0)',
+          //     pointHoverBackgroundColor: config.colors.primary,
+          //     pointBorderWidth: 20,
+          //     pointHoverRadius: 4,
+          //     pointHoverBorderWidth: 15,
+          //     pointRadius: 4,
+          //     data: this.valuesChartLine
+          //   }],
+          //   labels: label[labelIndex],
+          // }
 
-        // })
+        })
         
-        // this.$refs.bigChart.updateGradients(chartData); 
+        this.$refs.bigChart.updateGradients(chartData); 
         this.bigLineChart.activeIndex = index;
       },
 
       filterRegistered(data) {
+        console.log(data);
         this.bigLineChart = {
           allData: [
             // [10, 20, 30, 40, 50, 60, 75, 60, 90, 80, 10, 100],

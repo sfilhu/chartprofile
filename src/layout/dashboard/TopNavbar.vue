@@ -1,153 +1,161 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-absolute"
-       :class="{'bg-white': showMenu, 'navbar-transparent': !showMenu}">
+  <nav
+    class="navbar navbar-expand-lg navbar-absolute"
+    :class="{'bg-white': showMenu, 'navbar-transparent': !showMenu}"
+  >
     <div class="container-fluid">
       <div class="navbar-wrapper">
         <div class="navbar-toggle d-inline" :class="{toggled: $sidebar.showSidebar}">
-          <button type="button"
-                  class="navbar-toggler"
-                  aria-label="Navbar toggle button"
-                  @click="toggleSidebar">
+          <button
+            type="button"
+            class="navbar-toggler"
+            aria-label="Navbar toggle button"
+            @click="toggleSidebar"
+          >
             <span class="navbar-toggler-bar bar1"></span>
             <span class="navbar-toggler-bar bar2"></span>
             <span class="navbar-toggler-bar bar3"></span>
           </button>
         </div>
-        <a class="navbar-brand" href="#/dashboard">Nosso nome/logo</a>
-      </div>
-      <button class="navbar-toggler" type="button"
-              @click="toggleMenu"
-              data-toggle="collapse"
-              data-target="#navigation"
-              aria-controls="navigation-index"
-              aria-label="Toggle navigation">
-        <span class="navbar-toggler-bar navbar-kebab"></span>
-        <span class="navbar-toggler-bar navbar-kebab"></span>
-        <span class="navbar-toggler-bar navbar-kebab"></span>
-      </button>
 
-      <collapse-transition>
-        <div class="collapse navbar-collapse show" v-show="showMenu">
-          <ul class="navbar-nav" :class="$rtl.isRTL ? 'mr-auto' : 'ml-auto'">
-            <div class="search-bar input-group" @click="searchModalVisible = true">
-              <!-- <input type="text" class="form-control" placeholder="Search...">
-              <div class="input-group-addon"><i class="tim-icons icon-zoom-split"></i></div> -->
-              <button class="btn btn-link" id="search-button" data-toggle="modal" data-target="#searchModal">
-                <i class="tim-icons icon-zoom-split"></i>
-              </button>
-              <!-- You can choose types of search input -->
-            </div>
-            <modal :show.sync="searchModalVisible"
-                   class="modal-search"
-                   id="searchModal"
-                   :centered="false"
-                   :show-close="true">
-              <input slot="header" v-model="searchQuery" type="text" class="form-control" id="inlineFormInputGroup" placeholder="SEARCH">
-            </modal>
-            <base-dropdown tag="li"
-                           :menu-on-right="!$rtl.isRTL"
-                           title-tag="a" class="nav-item">
-              <a slot="title" href="#" class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="true">
-                <div class="notification d-none d-lg-block d-xl-block"></div>
-                <i class="tim-icons icon-sound-wave"></i>
-                <p class="d-lg-none">
-                  New Notifications
-                </p>
-              </a>
-              <li class="nav-link">
-                <a href="#" class="nav-item dropdown-item">Mike John responded to your email</a>
-              </li>
-              <li class="nav-link">
-                <a href="#" class="nav-item dropdown-item">You have 5 more tasks</a>
-              </li>
-              <li class="nav-link">
-                <a href="#" class="nav-item dropdown-item">Your friend Michael is in town</a>
-              </li>
-              <li class="nav-link">
-                <a href="#" class="nav-item dropdown-item">Another notification</a>
-              </li>
-              <li class="nav-link">
-                <a href="#" class="nav-item dropdown-item">Another one</a>
-              </li>
-            </base-dropdown>
-            <base-dropdown tag="li"
-                           :menu-on-right="!$rtl.isRTL"
-                           title-tag="a"
-                           class="nav-item"
-                           menu-classes="dropdown-navbar">
-              <a slot="title" href="#" class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="true">
-                <div class="photo">
-                  <img src="img/anime3.png">
-                </div>
-                <b class="caret d-none d-lg-block d-xl-block"></b>
-                <p class="d-lg-none">
-                  Log out
-                </p>
-              </a>
-              <li class="nav-link">
-                <a href="#" class="nav-item dropdown-item">Profile</a>
-              </li>
-              <li class="nav-link">
-                <a href="#" class="nav-item dropdown-item">Settings</a>
-              </li>
-              <div class="dropdown-divider"></div>
-              <li class="nav-link">
-                <a href="#" class="nav-item dropdown-item">Log out</a>
-              </li>
-            </base-dropdown>
-          </ul>
+        <a style="margin:0" class="navbar-brand" href="#/dashboard">
+          <img
+            style="width: 50px;margin-right:10px"
+            src="@/assets/images/logo.svg"
+            alt="logo"
+            title="Chart profile"
+          />
+          Chart Profile
+        </a>
+      </div>
+     
+      <div class="add-register">
+          <button class="dasktop-btn" style="margin-top: 15px" v-on:click="show()">+ Criar novo cadastro</button>
+          <button class="mobile-float-btn" v-on:click="show()">+</button>
         </div>
-      </collapse-transition>
+        <modal
+          class="modal-register"
+          name="my-first-modal"
+          :min-width="200"
+          :min-height="150"
+          :scrollable="true"
+          :reset="true"
+          :width="size"
+          height="auto"
+          styles="background: transparent;"
+        >
+          <Register />
+        </modal>
     </div>
   </nav>
 </template>
 <script>
-  import { CollapseTransition } from 'vue2-transitions';
-  import Modal from '@/components/Modal';
+import { CollapseTransition } from "vue2-transitions";
+import logo from "@/assets/images/logo.svg";
+import Register from '@/components/Register'
 
-  export default {
-    components: {
-      CollapseTransition,
-      Modal
+export default {
+  components: {
+    CollapseTransition,
+    Register
+  },
+  computed: {
+    routeName() {
+      const { name } = this.$route;
+      return this.capitalizeFirstLetter(name);
     },
-    computed: {
-      routeName() {
-        const { name } = this.$route;
-        return this.capitalizeFirstLetter(name);
-      },
-      isRTL() {
-        return this.$rtl.isRTL;
+    isRTL() {
+      return this.$rtl.isRTL;
+    },
+
+     size() {
+        return window.innerWidth > 500 ? '60%' : '90%'
       }
+  },
+  data() {
+    return {
+      activeNotifications: false,
+      showMenu: false,
+      searchModalVisible: false,
+      searchQuery: "",
+    };
+  },
+  methods: {
+    capitalizeFirstLetter(string) {
+      return string.charAt(0).toUpperCase() + string.slice(1);
     },
-    data() {
-      return {
-        activeNotifications: false,
-        showMenu: false,
-        searchModalVisible: false,
-        searchQuery: ''
-      };
+    toggleNotificationDropDown() {
+      this.activeNotifications = !this.activeNotifications;
     },
-    methods: {
-      capitalizeFirstLetter(string) {
-        return string.charAt(0).toUpperCase() + string.slice(1);
-      },
-      toggleNotificationDropDown() {
-        this.activeNotifications = !this.activeNotifications;
-      },
-      closeDropDown() {
-        this.activeNotifications = false;
-      },
-      toggleSidebar() {
-        this.$sidebar.displaySidebar(!this.$sidebar.showSidebar);
-      },
-      hideSidebar() {
-        this.$sidebar.displaySidebar(false);
-      },
-      toggleMenu() {
-        this.showMenu = !this.showMenu;
-      }
-    }
-  };
+    closeDropDown() {
+      this.activeNotifications = false;
+    },
+    toggleSidebar() {
+      this.$sidebar.displaySidebar(!this.$sidebar.showSidebar);
+    },
+    hideSidebar() {
+      this.$sidebar.displaySidebar(false);
+    },
+    toggleMenu() {
+      this.showMenu = !this.showMenu;
+    },
+
+    show() {
+      console.log(this.$modal);
+      this.$modal.show("my-first-modal");
+    },
+    hide() {
+      this.$modal.hide("my-first-modal");
+    },
+  },
+};
 </script>
-<style>
+
+<style lang="css">
+.add-register {
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+.add-register button {
+  padding: 10px 15px;
+  margin-bottom: 15px;
+  outline: none;
+  border: none;
+  color: #fff;
+  border-radius: 5px;
+  background: #FF5611;
+  cursor: pointer;
+}
+
+.dasktop-btn {
+  display: block;
+}
+
+.mobile-float-btn {
+  display: none;
+}
+
+@media screen and (max-width: 500px) {
+  .dasktop-btn {
+    display: none;
+  }
+  .mobile-float-btn {
+    display: block;
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    border-radius: 50%!important;
+    font-size: 20px;
+  }
+  .modal-register {
+    top: 80px!important;
+  }
+  .modal-register .card {
+    height: 850px!important;
+  }
+}
+
 </style>

@@ -213,7 +213,7 @@
         }
         
         console.log(this.form);
-        api.post('/users', this.form).then( resp => {
+        api.post('/create', this.form).then( resp => {
           const { msg } = resp.data;
           this.$notify({
             type: 'success',  

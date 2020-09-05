@@ -6,10 +6,11 @@
     "simpleTable": "Simple Table",
     "totalShipments": "Total",
     "chartCategories": [
-      { "index": 0, "name": "Sem. atual"},
-      { "index": 0, "name": "Sem. passada"},
       { "index": 1, "name": "Este mês"},
-      { "index": 1, "name": "Mês passado"}
+      { "index": 1, "name": "Mês passado"},
+      { "index": 0, "name": "Sem. atual"},
+      { "index": 0, "name": "Sem. passada"}
+     
     ],
     "tasks": "Tasks({count})",
     "today": "Today",
