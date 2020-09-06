@@ -154,7 +154,7 @@ export default {
     top: 20px!important;
   }
   .modal-register .card {
-    height: 950px!important;
+    height: 900px!important;
   }
 }
 
