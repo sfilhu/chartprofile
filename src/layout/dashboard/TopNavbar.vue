@@ -151,7 +151,7 @@ export default {
     font-size: 20px;
   }
   .modal-register {
-    top: 80px!important;
+    top: 20px!important;
   }
   .modal-register .card {
     height: 850px!important;
