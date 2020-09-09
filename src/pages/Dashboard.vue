@@ -31,46 +31,7 @@
     <!-- Grafico de cadastrados -->
     <div class="row">
       <div class="col-12">
-        <card type="chart">
-          <template slot="header">
-            <div class="row">
-              <div class="col-sm-6" :class="isRTL ? 'text-right' : 'text-left'">
-                <h5 class="card-category">{{$t('dashboard.totalShipments')}}</h5>
-                <h2 class="card-title">{{$t('dashboard.performance')}}</h2>
-              </div>
-              <div class="col-sm-6">
-                <div class="btn-group btn-group-toggle"
-                      v-if="bigLineChart != null"
-                     :class="isRTL ? 'float-left' : 'float-right'"
-                     data-toggle="buttons">
-                  <label v-for="(option, index) in bigLineChartCategories"
-                         :key="index"
-                         class="btn btn-sm btn-primary btn-simple"
-                         :class="{active: bigLineChart.activeIndex === index}"
-                         :id="index">
-                    <input type="radio"
-                           @click="initBigChart(option.index, index)"
-                           name="options" autocomplete="off"
-                           :checked="bigLineChart.activeIndex === index">
-                    {{option.name}}
-                  </label>
-                </div>
-              </div>
-            </div>
-          </template>
-          <div class="chart-area">
-            <line-chart 
-              v-if="bigLineChart != null"
-              style="height: 100%"
-              ref="bigChart"
-              chart-id="big-line-chart"
-              :chart-data="bigLineChart.chartData"
-              :gradient-colors="bigLineChart.gradientColors"
-              :gradient-stops="bigLineChart.gradientStops"
-              :extra-options="bigLineChart.extraOptions">
-            </line-chart>
-          </div>
-        </card>
+        <BigLineChart />
       </div>
     </div>
 
@@ -86,6 +47,7 @@
           <div class="chart-area">
             <bar-chart 
               v-if="blueBarChart != null"
+              refs="bigChart"
               style="height: 100%"
               chart-id="blue-bar-chart"
               :chart-data="blueBarChart.chartData"
@@ -105,13 +67,13 @@
           </template>
           <div class="chart-area">
             <bar-chart 
-              v-if="diChart != null"
+              v-if="ageChart != null"
               style="height: 100%"
               chart-id="purple-line-chart"
-              :chart-data="diChart.chartData"
-              :gradient-colors="diChart.gradientColors"
-              :gradient-stops="diChart.gradientStops"
-              :extra-options="diChart.extraOptions">
+              :chart-data="ageChart.chartData"
+              :gradient-colors="ageChart.gradientColors"
+              :gradient-stops="ageChart.gradientStops"
+              :extra-options="ageChart.extraOptions">
             </bar-chart>
           </div>
         </card>
@@ -245,98 +207,63 @@
 </template>
 <script>
   import api from '@/service/api'
+  import BigLineChart from './components/BigChartLine'
   import LineChart from '@/components/Charts/LineChart';
   import BarChart from '@/components/Charts/BarChart';
   import * as chartConfigs from '@/components/Charts/config';
   import TaskList from './Dashboard/TaskList';
   import UserTable from './Dashboard/UserTable';
   import config from '@/config';
-  import moment from 'moment';
 
   export default {
     components: {
       LineChart,
       BarChart,
       TaskList,
-      UserTable
+      UserTable,
+      BigLineChart
     },
     data() {
       return {
+        // Estado inicial da tela
+        diChart: null,
+        ageChart: null,
+        parceriaChart: null,
+        blueBarChart: null,
         users: '',
         valuesChartLine: [],
-        know: {
-          indicacao: 0,
-          instagram: 0,
-          di: 0,
-          parceria: 0
-        },
+        know: { indicacao: 0, instagram: 0, di: 0, parceria: 0 },
         registered: 0,
         noRegistered: 0,
-        bigLineChart: null,
-        diChart: null,
-        parceriaChart: null,
-        greenLineChart: {
-          extraOptions: chartConfigs.greenChartOptions,
+
+        // 
+        bigLineChart: {
+          allData: [
+            [100, 70, 90, 70, 85, 60, 75, 60, 90, 80, 110, 100],
+            [80, 120, 105, 110, 95, 105, 90, 100, 80, 95, 70, 120],
+            [60, 80, 65, 130, 80, 105, 90, 130, 70, 115, 60, 130]
+          ],
+          activeIndex: 0,
           chartData: {
-            labels: ['JUL', 'AUG', 'SEP', 'OCT', 'NOV'],
-            datasets: [{
-              label: "My First dataset",
-              fill: true,
-              borderColor: config.colors.danger,
-              borderWidth: 2,
-              borderDash: [],
-              borderDashOffset: 0.0,
-              pointBackgroundColor: config.colors.danger,
-              pointBorderColor: 'rgba(255,255,255,0)',
-              pointHoverBackgroundColor: config.colors.danger,
-              pointBorderWidth: 20,
-              pointHoverRadius: 4,
-              pointHoverBorderWidth: 15,
-              pointRadius: 4,
-              data: [90, 27, 60, 12, 80],
-            }]
+            datasets: [{ }],
+            labels: ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
           },
-          gradientColors: ['rgba(66,134,121,0.15)', 'rgba(66,134,121,0.0)', 'rgba(66,134,121,0)'],
+          extraOptions: chartConfigs.purpleChartOptions,
+          gradientColors: config.colors.primaryGradient,
           gradientStops: [1, 0.4, 0],
+          categories: []
         },
-        blueBarChart: null,
-        items: [
-            { 
-                // label: 'Esta semana',
-                data_inicio : moment().clone().startOf('week').add(1, 'days').toISOString(),
-                data_final  : moment().clone().endOf('week').add(1, 'days').toISOString(),
-            },
-            { 
-                // label: 'Semana passada',
-                data_inicio : moment().subtract(1, 'weeks').clone().startOf('week').add(1, 'days').toISOString(),
-                data_final  : moment().subtract(1, 'weeks').clone().endOf('week').add(1, 'days').toISOString(), 
-            },
-            { 
-                // label: 'Últimos 30 dias',
-                data_inicio : moment().clone().startOf('month').toISOString(),
-                data_final  : moment().clone().endOf('month').toISOString(),
-            },
-            { 
-                // label: 'Mês passado',
-                data_inicio : moment().subtract(1, 'months').clone().startOf('month').toISOString(),
-                data_final  : moment().subtract(1, 'months').clone().endOf('month').toISOString(),
-            },
-        ]
       }
     },
     mounted() {
-      this.bigLineChart = {};
-
-      api.get('/users').then( resp => {
+      api.get('/users').then(async resp => {
         this.users = resp.data;
-        // alert(this.users.length)
-        this.registered = this.users.filter(item => item.registered == 1).length
+        this.registered   = this.users.filter(item => item.registered == 1).length
         this.noRegistered = this.users.filter(item => item.registered == 0).length
         
         this.filterByGenary(resp.data)
         this.filterByKnow(resp.data)
-        this.filterRegistered(resp.data)
-        this.initBigChart(1,0);
+        await this.filterByAge(resp.data)
       }).catch( err => {
         console.log(err)
       })
@@ -361,68 +288,12 @@
       }
     },
     methods: {
-      // aki
-      initBigChart(labelIndex, index) {
-        // option.index, index
-
-
-        const label = {
-          0: ['SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SÁB', 'DOM'],
-          1: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', 
-              '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29',
-              '30', '31'],
-          2: ['JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ'],
-        }
-        
-        console.log(labelIndex, index);
-
-        api.post('/filterRegister', this.items[index]).then( async resp => {
-          const data_inicio = moment(this.items[index].data_inicio).format('DD')
-          const data_final  = moment(this.items[index].data_final).format('DD')
-          let cont = 0
-
-          for(let i = data_inicio; i <= data_final; i++) {
-            let lengthDateFiltred = await resp.data.filter( item => moment(item.checkIn).format('DD') == i).length;
-            console.log(cont, lengthDateFiltred);
-            this.valuesChartLine[cont] = lengthDateFiltred;
-            cont++;
-          }
-
-          console.log(this.valuesChartLine);
-          console.log(this.bigLineChart);
-          // aki
-          // this.bigLineChart.chartData = {
-          //   datasets: [{
-          //     fill: true,
-          //     borderColor: config.colors.primary,
-          //     borderWidth: 2,
-          //     borderDash: [],
-          //     borderDashOffset: 0.0,
-          //     pointBackgroundColor: config.colors.primary,
-          //     pointBorderColor: 'rgba(255,255,255,0)',
-          //     pointHoverBackgroundColor: config.colors.primary,
-          //     pointBorderWidth: 20,
-          //     pointHoverRadius: 4,
-          //     pointHoverBorderWidth: 15,
-          //     pointRadius: 4,
-          //     data: this.valuesChartLine
-          //   }],
-          //   labels: label[labelIndex],
-          // }
-
-        })
-        
-        this.$refs.bigChart.updateGradients(chartData); 
-        this.bigLineChart.activeIndex = index;
-      },
-
       filterRegistered(data) {
-        console.log(data);
         this.bigLineChart = {
           allData: [
-            // [10, 20, 30, 40, 50, 60, 75, 60, 90, 80, 10, 100],
-            // [80, 120, 105, 110, 95, 105, 90, 100, 80, 95, 70, 100],
-            // [60, 80, 65, 130, 80, 105, 90, 130, 70, 115, 60, 100]
+            [10, 20, 30, 40, 50, 60, 75, 60, 90, 80, 10, 100],
+            [80, 120, 105, 110, 95, 105, 90, 100, 80, 95, 70, 100],
+            [60, 80, 65, 130, 80, 105, 90, 130, 70, 115, 60, 100]
           ],
           activeIndex: 0,
           chartData: {
@@ -434,6 +305,41 @@
           gradientStops: [1, 0.4, 0],
           categories: []
         }
+      },
+
+      filterByAge(data) {
+        const arrAge = data.map(item => item.age);
+        const range1 = arrAge.filter(item => item >= 15 && item <= 25).length;
+        const range2 = arrAge.filter(item => item >= 26 && item <= 35).length;
+        const range3 = arrAge.filter(item => item >= 36 && item <= 45).length;
+        const range4 = arrAge.filter(item => item >= 46 && item <= 55).length;
+        const range5 = arrAge.filter(item => item >= 55).length;
+
+        this.ageChart = {
+          extraOptions: chartConfigs.barChartOptions,
+          chartData: {
+            labels: ['15 - 25','26 - 35', '36 - 45', '46 - 55', 'Acima de 55'],
+            datasets: [{
+              label: "Data",
+              fill: true,
+              borderColor: config.colors.primary,
+              borderWidth: 2,
+              borderDash: [],
+              borderDashOffset: 0.0,
+              pointBackgroundColor: config.colors.primary,
+              pointBorderColor: 'rgba(255,255,255,0)',
+              pointHoverBackgroundColor: config.colors.primary,
+              pointBorderWidth: 20,
+              pointHoverRadius: 4,
+              pointHoverBorderWidth: 15,
+              pointRadius: 4,
+              data: [range1, range2, range3, range4, range5],
+            }]
+          },
+          gradientColors: config.colors.primaryGradient,
+          gradientStops: [1, 0.2, 0],
+        }
+        
       },
       
       filterByGenary(data) {

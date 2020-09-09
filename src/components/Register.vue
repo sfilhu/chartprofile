@@ -112,11 +112,10 @@
             <base-input label="Qual?">
               <select class="form-control" style="color: #999" v-model="form.whichActivity">
                 <option value="" selected disabled>Selecione</option>
+                <option value="crossfit">Crossfit</option>
                 <option value="musculacao">Musculação</option>
-                <option value="pilates">Pilates</option>
-                <option value="natacao">Natação</option>
-                <option value="futebol">Futebol</option>
                 <option value="luta">Luta</option>
+                <option value="outro">Outro</option>
               </select>
             </base-input>
           </div>
