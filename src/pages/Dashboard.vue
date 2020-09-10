@@ -41,8 +41,6 @@
         <card type="chart">
           <template slot="header">
             <h5 class="card-category">{{$t('dashboard.dailySales')}}</h5> 
-            <!-- aki -->
-            <!-- <h3 class="card-title"><i class="tim-icons icon-delivery-fast text-info "></i> 3,500€</h3> -->
           </template>
           <div class="chart-area">
             <bar-chart 
@@ -258,8 +256,8 @@
     mounted() {
       api.get('/users').then(async resp => {
         this.users = resp.data;
-        this.registered   = this.users.filter(item => item.registered == 1).length
-        this.noRegistered = this.users.filter(item => item.registered == 0).length
+        this.registered   = this.users.filter(item => item.registered == 'true').length
+        this.noRegistered = this.users.filter(item => item.registered == 'false').length
         
         this.filterByGenary(resp.data)
         this.filterByKnow(resp.data)
