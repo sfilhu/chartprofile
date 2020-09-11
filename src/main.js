@@ -20,9 +20,10 @@ import router from "./router/index";
 
 import BlackDashboard from "./plugins/blackDashboard";
 import i18n from "./i18n"
-import './registerServiceWorker'
+import './serviceWorker'
 import VModal from 'vue-js-modal'
 import VueMask from 'v-mask'
+import * as serviceWorker from './serviceWorker';
 
 Vue.use(VueMask);
 Vue.use(BlackDashboard);
@@ -36,3 +37,9 @@ new Vue({
   i18n,
   render: h => h(App)
 }).$mount("#app");
+
+if (process.env.NODE_ENV === 'development') {
+  serviceWorker.unregister()
+} else {
+  serviceWorker.register()
+}
